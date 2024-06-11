@@ -1,3 +1,6 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -26,19 +29,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        # If you're changing the branch from main,
+        # also change the `main` in `refs/heads/main`
+        # below accordingly.
+        if: github.ref == 'refs/heads/main'
         with:
-          # Upload contents of the /public/ folder
-          name: public
-          path: 'public'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-        with:
-          # Deploy contents of the /public/ folder
-          folder: 'public'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
